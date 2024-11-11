@@ -43,7 +43,7 @@ const registerUser = async (req, res) => {
 
         const token = createToken(user._id);
 
-        res.status(200).json({ _id: user._id, name, instrument, token });
+        res.status(200).json({ _id: user._id, name, instrument, token , isAdmin: user.isAdmin});
     }catch(error){
         console.log(error);
         res.status(500).json({error});
