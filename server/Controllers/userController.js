@@ -11,7 +11,7 @@ const createToken = (_id) => {
 }
 const registerUser = async (req, res) => {
     try{
-        const { name, password, instrument } = req.body;
+        const { name, password, instrument, isAdmin } = req.body;
 
         let user = await userModel.findOne({ name });
         if (user) {
@@ -20,15 +20,20 @@ const registerUser = async (req, res) => {
         if (!name || !password || !instrument) {
             return res.status(400).json({ message: "Please fill all fields" });
         }
-
+        if (instrument!== "guitar" && instrument!== "piano" && instrument!== "drums" && instrument!== "bass" && instrument!== "singer") {
+            return res.status(400).json({ message: "Instrument must be one of: guitar, piano, drums, bass, singer" });
+        }
         if(!validator.isStrongPassword(password)){
             return res.status(400).json({ message: "Password is not strong enough" });
         }
-
+        if (name.length < 2 || name.length > 20) {
+            return res.status(400).json({ message: "Please fill correct name" });
+        }
         user = new userModel({
             name,
             password,
             instrument,
+            isAdmin: isAdmin || false,
         });
 
         const salt = await bcrypt.genSalt(10);
@@ -43,7 +48,6 @@ const registerUser = async (req, res) => {
         console.log(error);
         res.status(500).json({error});
     };
-    
 };
 
 const loginUser = async (req, res) => {

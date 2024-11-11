@@ -7,9 +7,10 @@ const userSchema = new mongoose.Schema(
     instrument: {
       type: String,
       required: true,
-      enum: ["guitar", "piano", "violin", "singer"], // רשימה של כלי נגינה או "זמר"
+      enum: ["guitar", "piano", "drums", "singer", "bass"], // רשימה של כלי נגינה או "זמר"
       message: 'Instrument must be a valid instrument or "singer"',
     },
+    isAdmin: { type: Boolean , default: false }, // יש לוודא שהערך יהיה בוליאני
   },
   { timestamps: true }
 ); //אם לא יהיה לי צורך בהמשך לדעת בתאריך ושעה של ביצוע עדכון יוזר אפשר להוריד את הtimestamps

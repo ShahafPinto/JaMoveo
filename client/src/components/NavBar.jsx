@@ -27,7 +27,9 @@ const NavBar = () => {
 
                     {!user && (<>
                         <Link to="/login" className="link-light text-decoration-none">Login</Link>
-                        <Link to="/register" className="link-light text-decoration-none">Register</Link>
+                        Register:
+                        <Link to="/admin-register" className="link-light text-decoration-none">admin</Link>
+                        <Link to="/register" className="link-light text-decoration-none">not admin</Link>
                     </>)}
                 </Stack>
             </Nav>

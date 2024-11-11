@@ -12,6 +12,7 @@ export const AuthContextProvider = ({ children }) => {
         name: "",
         instrument: "",
         password: "",
+        isAdmin: false,
     });
     const [loginError, setLoginError] = useState(null);
     const [isLoginLoading, setIsLoginLoading] = useState(false);
@@ -21,7 +22,7 @@ export const AuthContextProvider = ({ children }) => {
     });
 
     console.log('userr:', user);
-    console.log('loginInfo:', loginInfo);
+    console.log('registerInfo:', registerInfo);
 
     useEffect(() => {
         const user = localStorage.getItem("User");
@@ -43,6 +44,20 @@ export const AuthContextProvider = ({ children }) => {
         setIsRegisterLoading(true);
         setRegisterError(null);
         const response = await postRequest(`${baseUrl}/users/register`, JSON.stringify(registerInfo));
+        setIsRegisterLoading(false);
+        if(response.error){
+            return setRegisterError(response);
+        } 
+        localStorage.setItem("User", JSON.stringify(response));
+        setUser(response);
+    }, [registerInfo]);
+
+    const registerAdminUser = useCallback(async(e) => {
+        e.preventDefault();
+        setIsRegisterLoading(true);
+        setRegisterError(null);
+        
+        const response = await postRequest(`${baseUrl}/users/admin-register`, JSON.stringify(registerInfo));    
         setIsRegisterLoading(false);
         if(response.error){
             return setRegisterError(response);
@@ -88,6 +103,7 @@ export const AuthContextProvider = ({ children }) => {
             loginError,
             isLoginLoading,
             logoutUser,
+            registerAdminUser,
         }}>
         {children}
     </AuthContext.Provider>

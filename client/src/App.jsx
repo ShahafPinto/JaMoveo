@@ -8,6 +8,7 @@ import { Container } from "react-bootstrap";
 import NavBar from "./components/NavBar";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
+import AdminRegister from "./pages/AdminRegister";
 
 function App() {
   const {user} = useContext(AuthContext);
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={user? <MainPage /> : <Login />} />
           <Route path="/register" element={user? <MainPage /> :<Register />} />
+          <Route path="/admin-register" element={user? <MainPage /> :<AdminRegister />} />
           <Route path="/login" element={user? <MainPage /> :<Login />} />
           <Route path="/live" element={<LivePage />} />
           <Route path="*" element={<Navigate to="/" />} />

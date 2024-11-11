@@ -20,7 +20,6 @@ const Login = () => {
             <h2>Login</h2>
             <Form.Control type="text" placeholder="Username" onChange={(e)=> updateLoginInfo({...loginInfo, name: e.target.value})}/>
             <Form.Control type="password" placeholder="Password" onChange={(e)=> updateLoginInfo({...loginInfo, password: e.target.value})}/>
-            
             <Button variant="primary" type="submit">
               {isLoginLoading? "Getting you in...": "Login"}
             </Button>
