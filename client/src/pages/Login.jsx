@@ -1,8 +1,28 @@
+import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
+
 const Login = () => {
   return (
-    <div>
-      log in
-    </div>
+    <Form>
+      <Row style={{
+        height: "100vh",
+        justifyContent: "center",
+        paddingTop: "10vh" 
+      }}>
+        <Col xs={6}>
+          <Stack gap={3}>
+            <h2>Login</h2>
+            <Form.Control type="text" placeholder="Username" />
+            <Form.Control type="password" placeholder="Password" />
+            <Button variant="primary" type="submit">
+              Login
+            </Button>
+            <Alert variant="danger">
+              Error
+            </Alert>
+          </Stack>
+        </Col>
+      </Row>
+    </Form>
   )
 }
 
