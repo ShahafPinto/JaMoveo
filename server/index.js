@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const userRoute = require("./Routes/userRoute")
+const songsRoute = require("./Routes/songsRoute");
 
 const app = express();
 require("dotenv").config();
@@ -9,7 +10,7 @@ require("dotenv").config();
 app.use(express.json());
 app.use(cors());
 app.use("/users", userRoute);
-
+app.use("/songs", songsRoute);
 
 app.get("/", (req,res) => {
     res.send("Welcome our JaMoveo App")

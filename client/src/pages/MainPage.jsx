@@ -2,32 +2,27 @@ import React, {useContext} from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
   const {user} = useContext(AuthContext);
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredSongs, setFilteredSongs] = useState([]);
-
-  const songs = [
-    "Bohemian Rhapsody",
-    "Imagine",
-    "Hey Jude",
-    "Stairway to Heaven",
-    "Sweet Child O' Mine"
-  ]; // דוגמת רשימת שירים
-
-
+  const navigate = useNavigate();
+  console.log('searchQuery',searchQuery);
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async(e) => {
     e.preventDefault();
-    const results = songs.filter(song =>
-      song.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    setFilteredSongs(results);
+    console.log('searchQuery after submit',searchQuery);
+    // שלח את בקשת החיפוש לשרת
+    const response = await fetch(`http://localhost:5000/songs/search?query=${searchQuery}`);
+    const data = await response.json();
+
+    // ניווט לעמוד התוצאות
+    navigate(`/results`, { state: { songs: data } });
   };
 
   return (
@@ -61,19 +56,6 @@ const MainPage = () => {
                 Search
               </Button>
             </Form>
-            <div className="mt-4">
-              {filteredSongs.length > 0 ? (
-                <ul>
-                  {filteredSongs.map((song, index) => (
-                    <li key={index} style={{ color: 'white' }}>
-                      {song}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p style={{ color: 'white' }}>No songs found...</p>
-              )}
-            </div>
           </Card>
         </div>
       }
