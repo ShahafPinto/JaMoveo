@@ -1,32 +1,34 @@
 import React, {useContext} from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Container, Button } from 'react-bootstrap';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const LivePage = () => {
-  const {user, songData} = useContext(AuthContext);
+  const {user, songData, setIsSongSelected} = useContext(AuthContext);
   const [isScrolling, setIsScrolling] = useState(true);
+  const navigate = useNavigate();
 
   console.log('songData:', songData);
-// פונקציה להתחלת / עצירת הגלילה
   const toggleScrolling = () => setIsScrolling(!isScrolling);
 
   useEffect(() => {
     let scrollInterval;
-
-    // אם הגלילה מופעלת
     if (isScrolling) {
       scrollInterval = setInterval(() => {
-        // גלילה כלפי מטה
-        window.scrollBy(0, 1);  // גלילה בכיוון האנכי כל 10 פיקסלים
-      }, 50);  // קצב הגלילה (מילישניות)
+        window.scrollBy(0, 1); 
+      }, 50); 
     }
-
-    // עצירת הגלילה
     return () => clearInterval(scrollInterval);
   }, [isScrolling]);
 
   const title = songData.file.slice(0, -5);
+
+  const handleQuit = () => {
+    setIsSongSelected(false); 
+    navigate('/');
+  };
+
   return (
     <>
     <div
@@ -115,6 +117,23 @@ const LivePage = () => {
       >
         {isScrolling ? 'Stop' : 'Start'}
       </Button>
+      {/* Quit Button (Only visible for admin) */}
+      {user.isAdmin && (
+          <Button
+            onClick={handleQuit}
+            variant="danger"
+            style={{
+              position: 'fixed',
+              bottom: '80px',
+              right: '20px',
+              padding: '10px 20px',
+              fontSize: '1.2rem',
+              fontWeight: 'bold',
+            }}
+          >
+            Quit
+          </Button>
+        )}
     </Container>
     </>
   )
