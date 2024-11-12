@@ -50,7 +50,7 @@ const registerUser = async (req, res) => {
     };
 };
 
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, io) => {
     const { name, password } = req.body;
     try {
         let user = await userModel.findOne({name});

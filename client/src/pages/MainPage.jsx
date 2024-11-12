@@ -3,16 +3,38 @@ import { AuthContext } from '../context/AuthContext';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import io from 'socket.io-client';
 
 const MainPage = () => {
-  const {user} = useContext(AuthContext);
-
+  const {user, joinRehearsal, setSongData} = useContext(AuthContext);
+  const socket = io('http://localhost:5000'); 
+  
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   console.log('searchQuery',searchQuery);
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
+
+  useEffect(() => {
+      if (user) {
+          joinRehearsal(user._id); // הצטרפות לחדר החזרות
+      }
+  }, [user]);
+
+  useEffect(() => {
+    socket.on('adminSelectSong', (data) => {
+      if (data.action === 'songSelected') {
+        setSongData(data.song);
+        navigate('/live');
+      }
+    });
+
+    return () => {
+      socket.off('adminSelectSong');
+    };
+  }, []);
 
   const handleSearchSubmit = async(e) => {
     e.preventDefault();
