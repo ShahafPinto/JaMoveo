@@ -53,6 +53,22 @@ const usersInRoom = new Set();
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
+  // האזנה לפעולה של האדמין
+  socket.on('adminQuit', (data) => {
+    console.log('Admin triggered quit:', data);
+
+    // שליחה של האירוע לכל המשתמשים
+    io.emit('quitAction', data);
+  });
+
+  socket.on('adminSelectSong', (data) => {
+    console.log('Admin adminSelected Song:', data);
+    if (data && data.action === 'songSelected' && data.song) {
+      // שליחה של האירוע לכל המשתמשים
+      io.emit('adminSelectSong', data.song);
+    }
+  });
+
   socket.on('join-rehearsal', (userId) => {
     if (usersInRoom.has(userId)) {
       console.log(`User ${userId} is already in the rehearsal room.`);

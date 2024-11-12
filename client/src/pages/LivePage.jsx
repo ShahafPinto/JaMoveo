@@ -3,11 +3,13 @@ import { AuthContext } from '../context/AuthContext';
 import { Container, Button } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
 
 const LivePage = () => {
-  const {user, songData, setIsSongSelected} = useContext(AuthContext);
+  const {user, songData} = useContext(AuthContext);
   const [isScrolling, setIsScrolling] = useState(true);
   const navigate = useNavigate();
+  const socket = io('http://localhost:5000'); 
 
   console.log('songData:', songData);
   const toggleScrolling = () => setIsScrolling(!isScrolling);
@@ -25,9 +27,23 @@ const LivePage = () => {
   const title = songData.file.slice(0, -5);
 
   const handleQuit = () => {
-    setIsSongSelected(false); 
+    socket.emit('adminQuit', { action: 'quit' });
     navigate('/');
   };
+
+
+  useEffect(() => {
+    // האזנה לאירוע שנשלח מהשרת
+    socket.on('quitAction', (data) => {
+      console.log('Quit action received', data);
+      // כשהאירוע מתקבל, אפשר לבצע פעולה - כאן אנחנו מנווטים לעמוד הראשי
+      navigate('/');
+    });
+    // נקה את האזנה כאשר הקומפוננטה לא פעילה יותר (כשהיא יוצאת מה-DOM)
+    return () => {
+      socket.off('quitAction');
+    };
+  }, []);
 
   return (
     <>
