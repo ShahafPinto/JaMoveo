@@ -3,9 +3,10 @@ import { AuthContext } from '../context/AuthContext';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const MainPage = () => {
-  const {user} = useContext(AuthContext);
+  const {user, joinRehearsal} = useContext(AuthContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -13,6 +14,12 @@ const MainPage = () => {
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
+
+  useEffect(() => {
+      if (user) {
+          joinRehearsal(user._id); // הצטרפות לחדר החזרות
+      }
+  }, [user]);
 
   const handleSearchSubmit = async(e) => {
     e.preventDefault();
