@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const MainPage = () => {
-  const {user, joinRehearsal} = useContext(AuthContext);
+  const {user, joinRehearsal, isSongSelected} = useContext(AuthContext);
 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
@@ -20,6 +20,12 @@ const MainPage = () => {
           joinRehearsal(user._id); // הצטרפות לחדר החזרות
       }
   }, [user]);
+
+  useEffect(() => {
+    if (isSongSelected) {
+      navigate('/live');
+    }
+  }, [isSongSelected]);
 
   const handleSearchSubmit = async(e) => {
     e.preventDefault();

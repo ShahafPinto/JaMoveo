@@ -27,7 +27,7 @@ const searchSongs = (req, res) => {
                     if (part.lyrics.toLowerCase().includes(queryLowerCase)) {
                         results.push({
                             file,
-                            line,
+                            song,
                         });
                     }
                 }

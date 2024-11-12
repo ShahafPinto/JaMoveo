@@ -23,6 +23,7 @@ export const AuthContextProvider = ({ children }) => {
         name: "",
         password: "",
     });
+    const [isSongSelected, setIsSongSelected] = useState(false);
 
     console.log('userr:', user);
     console.log('registerInfo:', registerInfo);
@@ -97,6 +98,8 @@ export const AuthContextProvider = ({ children }) => {
         socket.emit('join-rehearsal', userId);
     };
 
+    const [songData, setSongData] = useState(null);
+
   return (
     <AuthContext.Provider 
         value={{ 
@@ -115,6 +118,10 @@ export const AuthContextProvider = ({ children }) => {
             registerAdminUser,
             joinRehearsal,
             socket,
+            isSongSelected,
+            setIsSongSelected,
+            songData,
+            setSongData,
         }}>
         {children}
     </AuthContext.Provider>
