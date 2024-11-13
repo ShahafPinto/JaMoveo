@@ -1,10 +1,15 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
 
 const Register = () => {
-  const { registerInfo, updateRegisterInfo, registerError, registerUser, isRegisterLoading } =
-    useContext(AuthContext);
+  const {
+    registerInfo,
+    updateRegisterInfo,
+    registerError,
+    registerUser,
+    isRegisterLoading,
+  } = useContext(AuthContext);
 
   return (
     <Form onSubmit={registerUser}>
@@ -49,7 +54,7 @@ const Register = () => {
               }
             />
             <Button variant="primary" type="submit">
-              {isRegisterLoading? "Loading...": "Register"}
+              {isRegisterLoading ? "Loading..." : "Register"}
             </Button>
             {registerError?.error && (
               <Alert variant="danger">
