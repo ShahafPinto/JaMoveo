@@ -13,7 +13,7 @@ const ResultsPage = () => {
   const location = useLocation();
   const { songs } = location.state || { songs: [] };
   const navigate = useNavigate();
-  const socket = io("http://localhost:3000");
+  const socket = io(import.meta.env.VITE_SOCKET_URL);
   
   const handleSelectSong = (song) => {
     updateCurrentSong(song);

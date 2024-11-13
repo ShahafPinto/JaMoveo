@@ -24,7 +24,7 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: "Instrument must be one of: guitar, piano, drums, bass, singer" });
         }
         if(!validator.isStrongPassword(password)){
-            return res.status(400).json({ message: "Password is not strong enough" });
+            return res.status(400).json({ message: "Password is not strong enough. Please ensure it includes at least one uppercase letter, one number, and one special character (e.g., !, @, #)." });
         }
         if (name.length < 2 || name.length > 20) {
             return res.status(400).json({ message: "Please fill correct name" });

@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 const MainPage = () => {
   const {setSongData, onlineUsers} = useContext(SessionContext);
   const {user} = useContext(AuthContext);
-  const socket = io("http://localhost:3000"); 
+  const socket = io(import.meta.env.VITE_SOCKET_URL); 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   console.log('searchQuery',searchQuery);

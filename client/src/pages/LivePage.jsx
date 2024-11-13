@@ -12,7 +12,7 @@ const LivePage = () => {
   const {user} = useContext(AuthContext);
   const [isScrolling, setIsScrolling] = useState(true);
   const navigate = useNavigate();
-  const socket = io("http://localhost:3000"); 
+  const socket = io(import.meta.env.VITE_SOCKET_URL); 
 
   console.log('songData in live page:', songData);
   const toggleScrolling = () => setIsScrolling(!isScrolling);
