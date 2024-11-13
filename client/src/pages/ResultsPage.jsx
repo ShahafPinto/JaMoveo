@@ -3,19 +3,21 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { ListGroup } from 'react-bootstrap';
 import {useContext} from 'react';
-import { AuthContext } from '../context/AuthContext';
 import io from 'socket.io-client';
+import { SessionContext } from '../context/SessionContext';
+import {baseUrl} from '../utils/services';
 
 const ResultsPage = () => {
-  const {setSongData} = useContext(AuthContext);
+  const {setSongData, onlineUsers, updateCurrentSong} = useContext(SessionContext);
+  
   const location = useLocation();
   const { songs } = location.state || { songs: [] };
   const navigate = useNavigate();
-  const socket = io('http://localhost:5000');
+  const socket = io("http://localhost:3000");
   
   const handleSelectSong = (song) => {
-    setSongData(song);
-    socket.emit('adminSelectSong', { action: 'songSelected', song });
+    updateCurrentSong(song);
+    socket.emit('adminSelectSong', { action: 'songSelected', song: song });
     navigate('/live');
     //console.log('selected song:', song);
   }

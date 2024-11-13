@@ -3,13 +3,15 @@ import { AuthContext } from '../context/AuthContext';
 import { Form, Button, Card } from 'react-bootstrap';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { SessionContext } from '../context/SessionContext';
+import {baseUrl} from '../utils/services';
+import {io} from 'socket.io-client';
 import { useEffect } from 'react';
-import io from 'socket.io-client';
 
 const MainPage = () => {
-  const {user, joinRehearsal, setSongData} = useContext(AuthContext);
-  const socket = io('http://localhost:5000'); 
-  
+  const {setSongData, onlineUsers} = useContext(SessionContext);
+  const {user} = useContext(AuthContext);
+  const socket = io("http://localhost:3000"); 
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   console.log('searchQuery',searchQuery);
@@ -17,36 +19,25 @@ const MainPage = () => {
     setSearchQuery(e.target.value);
   };
 
-  useEffect(() => {
-      if (user) {
-          joinRehearsal(user._id); // הצטרפות לחדר החזרות
-      }
-  }, [user]);
-
-  useEffect(() => {
-    socket.on('adminSelectSong', (data) => {
-      if (data.action === 'songSelected') {
-        setSongData(data.song);
-        navigate('/live');
-      }
-    });
-
-    return () => {
-      socket.off('adminSelectSong');
-    };
-  }, []);
-
   const handleSearchSubmit = async(e) => {
     e.preventDefault();
     console.log('searchQuery after submit',searchQuery);
     // שלח את בקשת החיפוש לשרת
-    const response = await fetch(`http://localhost:5000/songs/search?query=${searchQuery}`);
+    const response = await fetch(`${baseUrl}/songs/search?query=${searchQuery}`);
     const data = await response.json();
-
     // ניווט לעמוד התוצאות
+    socket.on('adminSelectSong', (data) => {
+      console.log('Song selected:', data);  
+      setSongData(data);
+      navigate('/live');
+    
+    });
     navigate(`/results`, { state: { songs: data } });
+    return () => {
+      socket.off('adminSelectSong');
+    };
   };
-
+  
   return (
     <>
       {!user.isAdmin && 

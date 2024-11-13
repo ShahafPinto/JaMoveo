@@ -1,11 +1,8 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { postRequest } from "../utils/services";
 import { baseUrl } from "../utils/services";
-import {io} from 'socket.io-client';
 
 export const AuthContext = createContext();
-
-const socket = io('http://localhost:5000');
 
 export const AuthContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -90,15 +87,6 @@ export const AuthContextProvider = ({ children }) => {
         setUser(null);
     }, []);
 
-    const joinRehearsal = (userId) => {
-        socket.on('connect', () => {
-            console.log('Connected to server');
-          });
-        socket.emit('join-rehearsal', userId);
-    };
-
-    const [songData, setSongData] = useState(null);
-
   return (
     <AuthContext.Provider 
         value={{ 
@@ -115,10 +103,6 @@ export const AuthContextProvider = ({ children }) => {
             isLoginLoading,
             logoutUser,
             registerAdminUser,
-            joinRehearsal,
-            socket,
-            songData,
-            setSongData,
         }}>
         {children}
     </AuthContext.Provider>

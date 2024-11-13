@@ -10,11 +10,13 @@ import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
 import AdminRegister from "./pages/AdminRegister";
 import ResultsPage from "./pages/ResultsPage"
+import { SessionContextProvider } from "./context/SessionContext"
 
 function App() {
   const {user} = useContext(AuthContext);
   return (
     <>
+    <SessionContextProvider user = {user}>
       <NavBar />
       <Container className="text-secondary">
         <Routes>
@@ -27,6 +29,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Container>
+    </SessionContextProvider>
     </>
   )
 }
