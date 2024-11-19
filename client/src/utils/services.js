@@ -1,5 +1,5 @@
-export const baseUrl = "http://localhost:5000";
-//export const baseUrl = "https://jamoveo-jx91.onrender.com";
+//export const baseUrl = "http://localhost:5000";
+export const baseUrl = "https://jamoveo-server-deploy.vercel.app/?vercelToolbarCode=2794tS0d6umVKBZ";
 
 export const postRequest = async (url, body) => {
     console.log('body', body);
