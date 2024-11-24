@@ -1,5 +1,5 @@
-export const baseUrl = "http://localhost:5000";
-//export const baseUrl = "https://jamoveo-server.onrender.com";
+//export const baseUrl = "http://localhost:5000";
+export const baseUrl = "https://jamoveo-server.onrender.com";
 
 export const postRequest = async (url, body) => {
     const response = await fetch(url, {
