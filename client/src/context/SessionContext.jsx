@@ -59,19 +59,6 @@ export const SessionContextProvider = ({ children, user }) => {
     };
   }, [socket]);
 
-  useEffect(() => {
-    const getSelectedSong = async () => {};
-    getSelectedSong();
-    if (socket === null) return;
-    socket.on("adminQuit", (data) => {
-      navigate("/");
-    });
-
-    return () => {
-      socket.off("adminQuit");
-    };
-  }, []);
-
   return (
     <SessionContext.Provider
       value={{
