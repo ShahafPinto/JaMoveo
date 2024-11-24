@@ -5,7 +5,6 @@ const { Server } = require("socket.io");
 
 const userRoute = require("./Routes/userRoute");
 const songsRoute = require("./Routes/songsRoute");
-const sessionRoute = require("./Routes/sessionRoute");
 
 const app = express();
 
@@ -16,7 +15,6 @@ app.use(express.json());
 app.use(cors());
 app.use("/users", userRoute);
 app.use("/songs", songsRoute);
-app.use("/sessions", sessionRoute);
 
 app.get("/", (req, res) => {
   res.send("Welcome our JaMoveo App");
