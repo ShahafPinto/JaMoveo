@@ -1,6 +1,7 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("fs"); // package to read files
+const path = require("path"); // package to work with file and directory paths
 
+// Function to search for songs based on a query provided by the user
 const searchSongs = (req, res) => {
   const query = req.query.query;
 
@@ -32,7 +33,7 @@ const searchSongs = (req, res) => {
       });
     });
   });
-  console.log(results);
+  //console.log(results);
   res.json(results);
 };
 
