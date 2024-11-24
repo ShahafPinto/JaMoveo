@@ -1,14 +1,16 @@
 const userModel = require("../Models/userModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const validator = require("validator");
+const bcrypt = require("bcrypt"); // package to hash passwords
+const jwt = require("jsonwebtoken"); // package to create JWT token
+const validator = require("validator"); // package to validate password strength
 
+// Function to create a JWT token for the user
 const createToken = (_id) => {
   const jwtkey = process.env.JWT_KEY;
   return jwt.sign({ _id }, jwtkey, {
     expiresIn: "3d",
   });
 };
+
 const registerUser = async (req, res) => {
   try {
     const { name, password, instrument, isAdmin } = req.body;
@@ -27,20 +29,16 @@ const registerUser = async (req, res) => {
       instrument !== "bass" &&
       instrument !== "singer"
     ) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Instrument must be one of: guitar, piano, drums, bass, singer",
-        });
+      return res.status(400).json({
+        message:
+          "Instrument must be one of: guitar, piano, drums, bass, singer",
+      });
     }
     if (!validator.isStrongPassword(password)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "Password is not strong enough. Please ensure it includes at least one uppercase letter, one number, and one special character (e.g., !, @, #).",
-        });
+      return res.status(400).json({
+        message:
+          "Password is not strong enough. Please ensure it includes at least one uppercase letter, one number, and one special character (e.g., !, @, #).",
+      });
     }
     if (name.length < 2 || name.length > 20) {
       return res.status(400).json({ message: "Please fill correct name" });
@@ -53,7 +51,7 @@ const registerUser = async (req, res) => {
     });
 
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    user.password = await bcrypt.hash(user.password, salt); // hash the password
 
     await user.save();
 
@@ -83,40 +81,38 @@ const loginUser = async (req, res, io) => {
     }
 
     const token = createToken(user._id);
-    res
-      .status(200)
-      .json({
-        _id: user._id,
-        name,
-        instrument: user.instrument,
-        token,
-        isAdmin: user.isAdmin,
-      });
+    res.status(200).json({
+      _id: user._id,
+      name,
+      instrument: user.instrument,
+      token,
+      isAdmin: user.isAdmin,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json(error);
   }
 };
 
-const findUser = async (req, res) => {
-  const userId = req.params.userId;
-  try {
-    const user = await userModel.findById(userId);
-    res.status(200).json(user);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-};
+// const findUser = async (req, res) => {
+//   const userId = req.params.userId;
+//   try {
+//     const user = await userModel.findById(userId);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error);
+//   }
+// };
 
-const getUsers = async (req, res) => {
-  try {
-    const users = await userModel.find();
-    res.status(200).json(users);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json(error);
-  }
-};
+// const getUsers = async (req, res) => {
+//   try {
+//     const users = await userModel.find();
+//     res.status(200).json(users);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json(error);
+//   }
+// };
 
-module.exports = { registerUser, loginUser, findUser, getUsers };
+module.exports = { registerUser, loginUser };
